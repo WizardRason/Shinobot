@@ -38,8 +38,3 @@ def startupCheck():
         print ("Either file is missing or is not readable, creating file...")
         f = open('rip_map.json','wb')  #create file locally
         f.close()
-
-        d = {}
-
-        with open('settings.json','w') as f:
-            json.dump(d, f)
