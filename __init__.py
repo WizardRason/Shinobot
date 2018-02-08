@@ -41,5 +41,5 @@ def startupCheck():
 
         d = {}
 
-        with open('settings.json','w') as f:
+        with open('rip_map.json','w') as f:
             json.dump(d, f)
