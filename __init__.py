@@ -8,24 +8,15 @@ def startupCheck():
         print ("File exists and is readable")
     else:
         print ("Either file is missing or is not readable, creating file...")
-        f = open('settings.json','wb')  #create file locally
-        f.close()
-
-        mal_username   = input("Please enter your mal username: ")
-        mal_password   = input("Please enter your mal password: ")
-        owner_user     = input("Please enter your discord id: ")
-        token          = input("Please enter your bot token: ")
-        secret_channel = input("Please enter the id of your private channel(where you talk as your bot): ")
-        public_channel = input("Please enter the id of your default public channel: ")
-
-        settings = {
-        "mal_username"    : mal_username,
-        "mal_password"    : mal_password,
-        "owner_user"      : owner_user,
-        "token"           : token,
-        "secret_channel"  : secret_channel,
-        "public_channel"  : public_channel
-        }
+        
+        settings = {k: input(f'Please enter {m}: ') for k, m in {
+            "mal_username": "your mal username",
+            "mal_password": "your mal password",
+            "owner_user": "discord id",
+            "token": "your bot token",
+            "secret_channel": "the id of your private channel (where you talk as your bot)",
+            "public_channel": "the id of your default public channel"
+        }.items()}
 
 
         with open('settings.json','w') as f:
