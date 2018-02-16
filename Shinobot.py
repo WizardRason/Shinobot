@@ -123,7 +123,7 @@ async def on_message(message):
             await client.send_file(message.channel, 'ripPics\\' + rip_meme + '.jpg',content=random.choice(rip_map[rip_meme]))
         else:
             await client.send_message(message.channel, random.choice(rip_map[rip_meme]))
-        asyncio.sleep(60)
+        await asyncio.sleep(60)
         rip_cooldown = True
 
     #gives the link to the mal page of the given anime
