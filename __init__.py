@@ -8,7 +8,7 @@ def startupCheck():
         print ("File exists and is readable")
     else:
         print ("Either file is missing or is not readable, creating file...")
-        
+
         settings = {k: input(f'Please enter {m}: ') for k, m in {
             "mal_username": "your mal username",
             "mal_password": "your mal password",
@@ -34,3 +34,5 @@ def startupCheck():
 
         with open('rip_map.json','w') as f:
             json.dump(d, f)
+            
+startupCheck()
