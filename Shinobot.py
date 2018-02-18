@@ -12,6 +12,8 @@ import random
 
 import init
 
+init.init()
+
 with open('settings.json') as f:
     settings = json.load(f)
 
@@ -185,5 +187,4 @@ async def on_message(message):
                 await client.send_file(client.get_channel(goto_channel), BytesIO(requests.get(k['url']).content), filename = 'file' + file_ext)
         echoing = True
 
-init.init()
 client.run(token)
