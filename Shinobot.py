@@ -84,14 +84,14 @@ async def on_message(message):
                     rip_map.update({filename: [quote]})
 
                 for k in message.attachments:
-                    if os.path.exists('ripPics\\' + filename + '.jpg'):
-                        client.send_file(client.get_member(owner_user),'ripPics\\' + filename + '.jpg',content="This got replaced")
+                    if os.path.exists('ripPics/' + filename + '.jpg'):
+                        client.send_file(client.get_member(owner_user),'ripPics/' + filename + '.jpg',content="This got replaced")
 
-                    f = open('ripPics\\' + filename + '.jpg','wb')  #create file locally
+                    f = open('ripPics/' + filename + '.jpg','wb')  #create file locally
                     f.write(requests.get(k['url']).content)  #write image content to this file
                     f.close()
 
-                await client.send_file(message.channel, 'ripPics\\' + filename + '.jpg' if os.path.exists('ripPics\\' + filename + '.jpg') else None,content=quote)
+                await client.send_file(message.channel, 'ripPics/' + filename + '.jpg' if os.path.exists('ripPics/' + filename + '.jpg') else None,content=quote)
             else:
                 await client.send_message(message.channel, 'Wait... what am I supposed to post?')
         else:
@@ -119,8 +119,8 @@ async def on_message(message):
         chosen_rip = message.content[4:].strip() if len(message.content.strip()) > 4 else None
         rip_meme = chosen_rip if chosen_rip in list(rip_map.keys()) else random.choice(list(rip_map.keys()))
         #await client.send_message(message.channel, rip_map[rip_meme])
-        if os.path.exists('ripPics\\' + rip_meme + '.jpg'):
-            await client.send_file(message.channel, 'ripPics\\' + rip_meme + '.jpg',content=random.choice(rip_map[rip_meme]))
+        if os.path.exists('ripPics/' + rip_meme + '.jpg'):
+            await client.send_file(message.channel, 'ripPics/' + rip_meme + '.jpg',content=random.choice(rip_map[rip_meme]))
         else:
             await client.send_message(message.channel, random.choice(rip_map[rip_meme]))
         await asyncio.sleep(60)
