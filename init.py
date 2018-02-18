@@ -2,7 +2,7 @@
 import json
 import os
 
-def startupCheck():
+def init():
     if os.path.exists("settings.json"):
         # checks if file exists
         print ("File exists and is readable")
@@ -35,4 +35,5 @@ def startupCheck():
         with open('rip_map.json','w') as f:
             json.dump(d, f)
             
-startupCheck()
+if __name__ == '__main__':
+    init()
