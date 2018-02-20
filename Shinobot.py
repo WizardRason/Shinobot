@@ -36,7 +36,7 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('-------')
-    print(settings)
+    #print(settings)
 
 @client.event
 async def on_message(message):
@@ -133,7 +133,7 @@ async def on_message(message):
     #gives the link to the mal page of the given anime
     elif (message.content.startswith('!anime') or message.content.startswith('!manga')):
         isAnime = (True if message.content[1] == 'a' else False)
-
+        jojo = False;
         if len(message.content.strip()) > 6:
             anime = message.content[6:].strip()
             if anime.isdigit():
@@ -141,11 +141,12 @@ async def on_message(message):
             else:
                 a = spice_api.search(anime, spice_api.get_medium('anime' if isAnime else 'manga'), creds)
         else:#default if none are given
+            jojo = True
             if isAnime:
-                await client.send_message(message.channel, 'You should watch Jojo:')# https://myanimelist.net/anime/14719/JoJo_no_Kimyou_na_Bouken_TV?q=jojo')
+                #await client.send_message(message.channel, 'You should watch Jojo:')# https://myanimelist.net/anime/14719/JoJo_no_Kimyou_na_Bouken_TV?q=jojo')
                 a = [spice_api.search_id(14719, spice_api.get_medium('anime'), creds)]
             else:
-                await client.send_message(message.channel, 'You should read Jojo:')# https://myanimelist.net/anime/14719/JoJo_no_Kimyou_na_Bouken_TV?q=jojo')
+                #await client.send_message(message.channel, 'You should read Jojo:')# https://myanimelist.net/anime/14719/JoJo_no_Kimyou_na_Bouken_TV?q=jojo')
                 a = [spice_api.search_id(3008, spice_api.get_medium('manga'), creds)]
 
         if a:
@@ -169,6 +170,8 @@ async def on_message(message):
                 embed.add_field(name="Episodes", value=a[0].episodes)
             else:
                 embed.add_field(name="Volumes", value=a[0].volumes).add_field(name="Chapters", value=a[0].chapters)
+            if jojo:
+                await client.send_message(message.channel, 'You should ' + ("watch" if isAnime else "read") + ' Jojo:')
             await client.send_message(message.channel, embed=embed)
             #await client.send_message(message.channel, 'https://myanimelist.net/anime/' + a[0].id)
         else:
