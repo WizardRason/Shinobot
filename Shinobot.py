@@ -112,7 +112,7 @@ async def on_message(message):
         for k in list(rip_map.keys()):
             list_rip = list_rip + k + ':\n'
             for l in rip_map[k]:
-                list_rip = list_rip +'\t"' + rip_map[k] + '"\n'
+                list_rip = list_rip +'\t"' + l + '"\n'
         await client.send_message(message.author, list_rip + '```')
 
     #posts a meme based on the given search term, or posts a default meme (meme.jpg)
