@@ -116,7 +116,7 @@ async def on_message(message):
         await client.send_message(message.author, list_rip + '```')
 
     #posts a meme based on the given search term, or posts a default meme (meme.jpg)
-    elif (rip_cooldown and message.content.startswith('!rip')): #not done yet
+    elif ((message.author.id == owner_user or rip_cooldown) and message.content.startswith('!rip')): #not done yet
         rip_cooldown = False
         with open('rip_map.json') as f:
             rip_map = json.load(f)
