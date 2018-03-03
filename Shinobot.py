@@ -102,7 +102,7 @@ async def on_message(message):
             else:
                 await client.send_message(message.channel, 'Wait... what am I supposed to post?')
         else:
-            await client.send_message(message.channel, '```!addrip <distinguishing filename without extension> <message to be included>\nInclude picture in post```')
+            await client.send_message(message.channel, '```!ripadd <distinguishing filename without extension> <message to be included>\nInclude picture in post```')
 
         with open('rip_map.json','w') as f:
             json.dump(rip_map, f)
