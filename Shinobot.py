@@ -9,6 +9,7 @@ from discord.ext.commands import Bot
 from discord.ext import commands
 import json
 import random
+import socket
 
 import init
 
@@ -40,6 +41,8 @@ async def on_ready():
     print(client.user.id)
     print('-------')
     print(path)
+    print(socket.gethostbyname(socket.gethostname()))
+    await client.send_message(client.get_member(owner_user), socket.gethostbyname(socket.gethostname()))
 
 @client.event
 async def on_message(message):
