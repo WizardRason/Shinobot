@@ -39,6 +39,7 @@ async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print(owner_user)
     print('-------')
     print(path)
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
