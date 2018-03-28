@@ -41,8 +41,11 @@ async def on_ready():
     print(client.user.id)
     print('-------')
     print(path)
-    print(socket.gethostbyname(socket.gethostname()))
-    await client.send_message(client.get_member(owner_user), socket.gethostbyname(socket.gethostname()))
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    print(s.getsockname()[0])
+    await client.send_message(client.get_user_info(owner_user), s.getsockname()[0])
+    s.close()
 
 @client.event
 async def on_message(message):
