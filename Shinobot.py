@@ -23,7 +23,7 @@ with open('settings.json') as f:
 
 client  = discord.Client()
 echoing = True
-rip_cooldown = True
+rip_cooldown = []
 
 creds = spice_api.init_auth(settings["mal_username"], settings["mal_password"])
 
@@ -126,8 +126,8 @@ async def on_message(message):
         await client.send_message(message.author, list_rip + '```')
 
     #posts a meme based on the given search term, or posts a default meme (meme.jpg)
-    elif ((message.author.id == owner_user or rip_cooldown) and message.content.startswith('!rip')): #not done yet
-        rip_cooldown = False
+    elif ((message.author.id == owner_user or message.author.id in rip_cooldown) and message.content.startswith('!rip')): #not done yet
+        rip_cooldown = message.author.id
         with open('rip_map.json') as f:
             rip_map = json.load(f)
         chosen_rip = message.content[4:].strip() if len(message.content.strip()) > 4 else None
@@ -138,7 +138,7 @@ async def on_message(message):
         else:
             await client.send_message(message.channel, random.choice(rip_map[rip_meme]))
         await asyncio.sleep(60)
-        rip_cooldown = True
+        rip_cooldown.remove(message.author.id)
 
     #gives the link to the mal page of the given anime
     elif (message.content.startswith('!anime') or message.content.startswith('!manga')):
