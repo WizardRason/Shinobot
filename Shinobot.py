@@ -24,6 +24,7 @@ with open('settings.json') as f:
 client  = discord.Client()
 echoing = True
 rip_cooldown = []
+cooldownTime = 15
 
 creds = spice_api.init_auth(settings["mal_username"], settings["mal_password"])
 
@@ -137,7 +138,7 @@ async def on_message(message):
             await client.send_file(message.channel, 'ripPics/' + rip_meme + '.jpg',content=random.choice(rip_map[rip_meme]))
         else:
             await client.send_message(message.channel, random.choice(rip_map[rip_meme]))
-        await asyncio.sleep(60)
+        await asyncio.sleep(cooldownTime)
         rip_cooldown.remove(message.author.id)
 
     #gives the link to the mal page of the given anime
