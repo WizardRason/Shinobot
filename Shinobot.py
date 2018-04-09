@@ -128,7 +128,7 @@ async def on_message(message):
 
     #posts a meme based on the given search term, or posts a default meme (meme.jpg)
     elif ((message.author.id == owner_user or message.author.id in rip_cooldown) and message.content.startswith('!rip')): #not done yet
-        rip_cooldown = message.author.id
+        rip_cooldown.append(message.author.id)
         with open('rip_map.json') as f:
             rip_map = json.load(f)
         chosen_rip = message.content[4:].strip() if len(message.content.strip()) > 4 else None
