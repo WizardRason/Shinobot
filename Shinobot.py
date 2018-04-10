@@ -55,7 +55,7 @@ async def on_message(message):
     global echoing
     global rip_cooldown
 
-    if any(x in message.content.lower() for x in ["doughnut", "donut"]):
+    if (client.user.id != message.author.id and any(x in message.content.lower() for x in ["doughnut", "donut"])):
         try:
             pid = os.fork()
         except OSError:
