@@ -83,7 +83,7 @@ async def on_message(message):
             msg = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
             await asyncio.sleep(cooldownTime)
             await client.delete_message(msg)
-            exit()
+            return
 
     #changes the public channel in which the bot comments
     if (echoing and message.channel.id == secret_channel and message.content.startswith('!swap')):
@@ -116,7 +116,7 @@ async def on_message(message):
 
     #posts a gif of shinobu being carried
     elif (message.content.startswith('!adult')):
-        await client.send_message(message.channel, 'I need an adult\n' + "https://vignette.wikia.nocookie.net/bakemonogatari1645/images/a/af/Tumblr_n4guqbYjFN1txc8l9o1_500.gif/revision/latest?cb=20150918011928")
+        await client.send_message(message.channel, 'I need an adult\n' + "https://thumbs.gfycat.com/BigheartedSplendidFlyingfish-size_restricted.gif")
 
     #adds to the rip_map
     elif (message.content.startswith('!ripadd')): #allow for multiple quotes per picture
