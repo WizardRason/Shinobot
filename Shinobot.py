@@ -49,6 +49,10 @@ async def on_ready():
     await client.send_message(await client.get_user_info(owner_user), s.getsockname()[0])
     s.close()
 
+async def deleteAfterTime(message):
+    await asyncio.sleep(cooldownTime)
+    await client.delete_message(message)
+
 @client.event
 async def on_message(message):
     global public_channel
@@ -56,34 +60,35 @@ async def on_message(message):
     global rip_cooldown
 
     if (client.user.id != message.author.id and any(x in message.content.lower() for x in ["doughnut", "donut"])):
-        try:
-            pid = os.fork()
-        except OSError:
-            exit("Could not create a child process")
-        if pid == 0:
-            doughLinks = [
-            "https://thumbs.gfycat.com/MiserlyNippyCockroach-size_restricted.gif",
-            "https://i.imgur.com/16GrVjp.gif",
-            "https://i.imgur.com/1kzxKmJ.gif",
-            "http://i0.kym-cdn.com/photos/images/original/000/758/438/be5.gif",
-            "https://thumbs.gfycat.com/ImaginativeRadiantAldabratortoise-size_restricted.gif",
-            "http://i0.kym-cdn.com/photos/images/original/001/089/184/f86.gif",
-            "https://78.media.tumblr.com/9642f23f4b95da57a9ea4c835e395e7a/tumblr_oompyrlBxh1r922azo1_540.gif"
-            ]
-            doughPhrases = [
-            "Did someone say DONUTS!?!?!?!",
-            "Just looking at it reveals how delicious it must be.\nI can tell! I don't even have to eat it.\nI will, though!",
-            "Please present those donuts to me immediately!",
-            "I haven't tasted it yet, but just imagining the flavor, I can almost feel it expanding in my mouth, and I'm certain that I'll shout, without being afraid of what others might think...\nJAPANAINO!",
-            "Flocky chou?",
-            "Panaino!",
-            "Are they donuts? They're donuts, right? They have to be donuts!",
-            "So they are donuts! That's magnificent!"
-            ]
-            msg = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
-            await asyncio.sleep(cooldownTime)
-            await client.delete_message(msg)
-            return
+        #try:
+        #    pid = os.fork()
+        #except OSError:
+        #    exit("Could not create a child process")
+        #if pid == 0:
+        doughLinks = [
+        "https://thumbs.gfycat.com/MiserlyNippyCockroach-size_restricted.gif",
+        "https://i.imgur.com/16GrVjp.gif",
+        "https://i.imgur.com/1kzxKmJ.gif",
+        "http://i0.kym-cdn.com/photos/images/original/000/758/438/be5.gif",
+        "https://thumbs.gfycat.com/ImaginativeRadiantAldabratortoise-size_restricted.gif",
+        "http://i0.kym-cdn.com/photos/images/original/001/089/184/f86.gif",
+        "https://78.media.tumblr.com/9642f23f4b95da57a9ea4c835e395e7a/tumblr_oompyrlBxh1r922azo1_540.gif"
+        ]
+        doughPhrases = [
+        "Did someone say DONUTS!?!?!?!",
+        "Just looking at it reveals how delicious it must be.\nI can tell! I don't even have to eat it.\nI will, though!",
+        "Please present those donuts to me immediately!",
+        "I haven't tasted it yet, but just imagining the flavor, I can almost feel it expanding in my mouth, and I'm certain that I'll shout, without being afraid of what others might think...\nJAPANAINO!",
+        "Flocky chou?",
+        "Panaino!",
+        "Are they donuts? They're donuts, right? They have to be donuts!",
+        "So they are donuts! That's magnificent!"
+        ]
+        msg_donut = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
+        asyncio.ensure_future(deleteAfterTime(msg_donut))
+        #await asyncio.sleep(cooldownTime)
+        #asyncio.get_event_loop().call_later(cooldownTime, lambda: client.delete_message(msg_donut))
+        #return
 
     #changes the public channel in which the bot comments
     if (echoing and message.channel.id == secret_channel and message.content.startswith('!swap')):
