@@ -35,7 +35,7 @@ token       = settings["token"]
 secret_channel = settings["secret_channel"]
 public_channel = settings["public_channel"]
 
-calebMessage = None;
+calebMessage = None
 
 @client.event
 async def on_ready():
@@ -192,7 +192,7 @@ async def on_message(message):
     #gives the link to the mal page of the given anime
     elif (message.content.startswith('!anime') or message.content.startswith('!manga')):
         isAnime = (True if message.content[1] == 'a' else False)
-        jojo = False;
+        jojo = False
         if len(message.content.strip()) > 6:
             anime = message.content[6:].strip()
             if anime.isdigit():
