@@ -35,6 +35,8 @@ token       = settings["token"]
 secret_channel = settings["secret_channel"]
 public_channel = settings["public_channel"]
 
+calebMessage = None;
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -58,6 +60,7 @@ async def on_message(message):
     global public_channel
     global echoing
     global rip_cooldown
+    global calebMessage
 
     if (client.user.id != message.author.id and any(x in message.content.lower() for x in ["doughnut", "donut"])):
         #try:
@@ -89,6 +92,11 @@ async def on_message(message):
         #await asyncio.sleep(cooldownTime)
         #asyncio.get_event_loop().call_later(cooldownTime, lambda: client.delete_message(msg_donut))
         #return
+
+    if (message.author.id == "351562513088774154"):
+        if (calebMessage != None):
+            await client.delete_message(calebMessage)
+        calebMessage = await client.send_message(message.channel, "You should play Doki Doki Literature Club: https://ddlc.moe/")
 
     #changes the public channel in which the bot comments
     if (echoing and message.channel.id == secret_channel and message.content.startswith('!swap')):
@@ -155,7 +163,7 @@ async def on_message(message):
         with open('rip_map.json','w') as f:
             json.dump(rip_map, f)
 
-    #pm the message auther with a list of all "rip"s
+    #pm the message author with a list of all "rip"s
     elif (message.content.startswith('!riplist')):
         with open('rip_map.json') as f:
             rip_map = json.load(f)
