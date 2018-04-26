@@ -35,7 +35,7 @@ token       = settings["token"]
 secret_channel = settings["secret_channel"]
 public_channel = settings["public_channel"]
 
-calebMessage = None
+calebMessage = {}
 
 @client.event
 async def on_ready():
@@ -93,9 +93,9 @@ async def on_message(message):
         #asyncio.get_event_loop().call_later(cooldownTime, lambda: client.delete_message(msg_donut))
         #return
 
-    if (message.author.id == "351562513088774154"):
-        if (calebMessage != None):
-            await client.delete_message(calebMessage)
+    if (message.author.id == "351562513088774154" and False):
+        if (calebMessage.get(message.channel.id) != None):
+            await client.delete_message(calebMessage.get(message.channel.id))
         calebMessage = await client.send_message(message.channel, "You should play Doki Doki Literature Club: https://ddlc.moe/")
 
     #changes the public channel in which the bot comments
