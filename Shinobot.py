@@ -51,8 +51,8 @@ async def on_ready():
     await client.send_message(await client.get_user_info(owner_user), s.getsockname()[0])
     s.close()
 
-async def deleteAfterTime(message):
-    await asyncio.sleep(cooldownTime)
+async def deleteAfterTime(message, coolDown):
+    await asyncio.sleep(coolDown)
     await client.delete_message(message)
 
 @client.event
@@ -63,11 +63,6 @@ async def on_message(message):
     global calebMessage
 
     if (client.user.id != message.author.id and any(x in message.content.lower() for x in ["doughnut", "donut"])):
-        #try:
-        #    pid = os.fork()
-        #except OSError:
-        #    exit("Could not create a child process")
-        #if pid == 0:
         doughLinks = [
         "https://thumbs.gfycat.com/MiserlyNippyCockroach-size_restricted.gif",
         "https://i.imgur.com/16GrVjp.gif",
@@ -88,10 +83,7 @@ async def on_message(message):
         "So they are donuts! That's magnificent!"
         ]
         msg_donut = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
-        asyncio.ensure_future(deleteAfterTime(msg_donut))
-        #await asyncio.sleep(cooldownTime)
-        #asyncio.get_event_loop().call_later(cooldownTime, lambda: client.delete_message(msg_donut))
-        #return
+        asyncio.ensure_future(deleteAfterTime(msg_donut, cooldownTime))
 
     if (message.author.id == "351562513088774154" and False):
         if (calebMessage.get(message.channel.id) != None):
