@@ -11,7 +11,9 @@ import json
 import random
 import socket
 
-import init
+from complexCommands import init
+from complexCommands import rip
+from complexCommands import anime
 
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
