@@ -2,6 +2,19 @@
 import json
 import os
 
+with open('settings.json') as f:
+	settings = json.load(f)
+
+username = settings["mal_username"]
+password = settings["mal_password"]
+
+#                 WizardRason#6819
+owner_user  = settings["owner_user"]
+token       = settings["token"]
+
+secret_channel = settings["secret_channel"]
+public_channel = settings["public_channel"]
+
 def init():
     if os.path.exists("settings.json"):
         # checks if file exists
