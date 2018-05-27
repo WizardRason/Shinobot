@@ -6,6 +6,9 @@ import requests
 
 from complexCommands import init
 
+path = os.path.dirname(os.path.realpath(__file__))
+os.chdir(path)
+
 owner_user = init.owner_user
 
 rip_cooldown = []
