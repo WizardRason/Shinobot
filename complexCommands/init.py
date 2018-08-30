@@ -75,7 +75,7 @@ def openSettings():
 	owner_user  = settings["owner_user"]
 	token       = settings["token"]
 
-	admin_server = settings["secret_channel"]
+	admin_server = settings["admin_server"]
 	
 if __name__ == '__main__':
 	init()
