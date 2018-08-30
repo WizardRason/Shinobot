@@ -1,6 +1,5 @@
 import discord
 import asyncio
-import json
 import bs4 as bs
 import urllib.request
 import spice_api

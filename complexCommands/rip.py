@@ -18,7 +18,7 @@ async def commandRip(message, client):
 	global rip_cooldown
 	#adds to the rip_map
 	if (message.content.startswith('!ripadd')): #allow for multiple quotes per picture
-		with open('rip_map.json') as f:
+		with open('jsonFiles/rip_map.json') as f:
 			rip_map = json.load(f)
 		if len(message.content.strip()) > 7:
 			mess = message.content[7:].strip()
@@ -45,12 +45,12 @@ async def commandRip(message, client):
 		else:
 			await client.send_message(message.channel, '```!ripadd <distinguishing filename without extension> <message to be included>\nInclude picture in post```')
 
-		with open('rip_map.json','w') as f:
+		with open('jsonFiles/rip_map.json','w') as f:
 			json.dump(rip_map, f)
 
 	#pm the message author with a list of all "rip"s
 	elif (message.content.startswith('!riplist')):
-		with open('rip_map.json') as f:
+		with open('jsonFiles/rip_map.json') as f:
 			rip_map = json.load(f)
 		list_rip ='```'
 		for k in list(rip_map.keys()):
@@ -62,7 +62,7 @@ async def commandRip(message, client):
 	#posts a meme based on the given search term, or posts a default meme (meme.jpg)
 	elif ((message.author.id == owner_user or message.author.id not in rip_cooldown) and message.content.startswith('!rip')): #not done yet
 		rip_cooldown.append(message.author.id)
-		with open('rip_map.json') as f:
+		with open('jsonFiles/rip_map.json') as f:
 			rip_map = json.load(f)
 		chosen_rip = message.content[4:].strip() if len(message.content.strip()) > 4 else None
 		rip_meme = chosen_rip if chosen_rip in list(rip_map.keys()) else random.choice(list(rip_map.keys()))

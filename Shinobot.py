@@ -2,12 +2,10 @@ import discord
 import asyncio
 import os
 import requests
-#import spice_api
-#import html
 from io import BytesIO
 from discord.ext.commands import Bot
 from discord.ext import commands
-#import json
+import json
 import random
 import socket
 
@@ -20,22 +18,18 @@ os.chdir(path)
 
 init.init()
 
-#with open('settings.json') as f:
-#	settings = json.load(f)
-
 client  = discord.Client()
-echoing = True
 
 cooldownTime = 15
-
-# creds = spice_api.init_auth(settings["mal_username"], settings["mal_password"])
 
 #                 WizardRason#6819
 owner_user  = init.owner_user 	#settings["owner_user"]
 token       = init.token 		#settings["token"]
 
-secret_channel = init.secret_channel	#settings["secret_channel"]
-public_channel = init.public_channel	#settings["public_channel"]
+admin_server = init.admin_server	#settings["admin_server"]
+
+with open('jsonFiles/channels.json') as f:
+	channels = json.load(f)
 
 @client.event
 async def on_ready():
@@ -57,9 +51,8 @@ async def deleteAfterTime(message, coolDown):
 
 @client.event
 async def on_message(message):
-	global public_channel
-	global echoing
-	
+	global channels
+
 	if (client.user.id != message.author.id and any(x in message.content.lower() for x in ["doughnut", "donut"])):
 		doughLinks = [
 		"https://thumbs.gfycat.com/MiserlyNippyCockroach-size_restricted.gif",
@@ -83,27 +76,6 @@ async def on_message(message):
 		msg_donut = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
 		asyncio.ensure_future(deleteAfterTime(msg_donut, cooldownTime))
 
-	#changes the public channel in which the bot comments
-	if (echoing and message.channel.id == secret_channel and message.content.startswith('!swap')):
-		echoing = False
-		list_channels ='To which channel should I go?```'
-		for k in client.get_channel(public_channel).server.channels:
-			if (not type(k.bitrate) is int) and secret_channel != k.id:
-				list_channels = list_channels + k.name + ':\t' + k.id + '\n'
-		await client.send_message(message.channel, list_channels + '```')
-		msg = await client.wait_for_message(author=message.author)
-		for k in client.get_channel(public_channel).server.channels:
-			invalid_channel = True
-			if (k.name == msg.content or k.id == msg.content) and secret_channel != k.id:
-				invalid_channel = False
-				public_channel = k.id
-				break
-		if invalid_channel:
-			await client.send_message(message.channel, 'Invalid Channel.')
-		else:
-			await client.send_message(message.channel, '__**Swapping to ' + client.get_channel(public_channel).name + '**__')
-		echoing = True
-
 	#posts a meme based on the given search term, or posts a default meme (meme.jpg)
 	elif (message.content.startswith('!meme') and False): #not done yet
 		if len(message.content.strip()) > 5:
@@ -125,18 +97,22 @@ async def on_message(message):
 		#await (anime.commandAnime(message, client) if message.content[1] == 'a' else anime.commandManga(message, client))
 		pass
 		
-	#posts everything (besides commands) said in public_channel into secret_channel, including who said it
-	elif (echoing and (message.channel.id == secret_channel or message.channel.id == public_channel) and client.user.id != message.author.id):
-		echoing = False
-		goto_channel = (public_channel if message.channel.id == secret_channel else secret_channel)
-		content =     (message.content if message.channel.id == secret_channel else '**' + message.author.name +'**: ' + message.content)
+	#posts everything said in public_channel into secret_channel, including who said it
+	if (message.server.id != admin_server or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
+		if message.channel.id not in list(channels.keys()) and message.server.id != admin_server:
+			newChan = await client.create_channel(server = admin_server, name = message.channel.name)
+			channels.update({message.channel.id: newChan.id})
+			channels.update({newChan.id: message.channel.id})
+			with open('jsonFiles/channels.json','w') as f:
+				json.dump(channels, f)
+		
+		content = (message.content if message.server.id == admin_server else '**' + message.author.name +'**: ' + message.content)
 		if content:
-			await client.send_message(client.get_channel(goto_channel), content)
+			await client.send_message(client.get_channel(channels[message.channel.id]), content)
 		if message.attachments:
 			for k in message.attachments:
 				_, file_ext = os.path.splitext(k['url'])
-				await client.send_file(client.get_channel(goto_channel), BytesIO(requests.get(k['url']).content), filename = 'file' + file_ext)
-		echoing = True
+				await client.send_file(client.get_channel(channels[message.channel.id]), BytesIO(requests.get(k['url']).content), filename = 'file' + file_ext)
 
 if __name__ == '__main__':
     client.run(token)
