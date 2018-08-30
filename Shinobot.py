@@ -100,7 +100,7 @@ async def on_message(message):
 	#posts everything said in public_channel into secret_channel, including who said it
 	if (message.server.id != admin_server or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
 		if message.channel.id not in list(channels.keys()) and message.server.id != admin_server:
-			newChan = await client.create_channel(server = admin_server, name = message.channel.name)
+			newChan = await client.create_channel(server = client.get_server(admin_server), name = message.channel.name)
 			channels.update({message.channel.id: newChan.id})
 			channels.update({newChan.id: message.channel.id})
 			with open('jsonFiles/channels.json','w') as f:
