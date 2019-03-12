@@ -6,6 +6,7 @@ import requests
 
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
+os.chdir('..')
 
 rip_cooldown = []
 cooldownTime = 15
