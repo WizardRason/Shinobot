@@ -90,7 +90,7 @@ async def on_message(message):
 
 	#!rip commands
 	elif (message.content.startswith('!rip')):
-		await rip.commandRip(message, client)
+		await rip.commandRip(message, client, owner_user)
 		
 	#gives the link to the mal page of the given anime
 	elif (message.content.startswith('!anime') or message.content.startswith('!manga')):

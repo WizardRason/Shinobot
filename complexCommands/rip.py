@@ -4,17 +4,13 @@ import random
 import os
 import requests
 
-from complexCommands import init
-
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
-
-owner_user = init.owner_user
 
 rip_cooldown = []
 cooldownTime = 15
 
-async def commandRip(message, client):
+async def commandRip(message, client, owner_user):
 	global rip_cooldown
 	#adds to the rip_map
 	if (message.content.startswith('!ripadd')): #allow for multiple quotes per picture
@@ -58,6 +54,21 @@ async def commandRip(message, client):
 			for l in rip_map[k]:
 				list_rip = list_rip +'\t"' + l + '"\n'
 		await client.send_message(message.author, list_rip + '```')
+
+	elif (message.content.startswith('!ripremove') and message.author.id == owner_user):
+		with open('jsonFiles/retiredRips.json') as f:
+			retiredList = json.load(f)
+		with open('jsonFiles/rip_map.json') as f:
+			rip_map = json.load(f)
+		mess = message.content[10:].strip()
+		
+		if mess in rip_map.keys():
+			retiredList.update({mess: rip_map.pop(mess, None)})
+			with open('jsonFiles/retiredRips.json','w') as f:
+				json.dump(retiredList, f)
+			with open('jsonFiles/rip_map.json','w') as f:
+				json.dump(rip_map, f)
+			await client.add_reaction(message, '👍')
 
 	#posts a meme based on the given search term, or posts a default meme (meme.jpg)
 	elif ((message.author.id == owner_user or message.author.id not in rip_cooldown) and message.content.startswith('!rip')): #not done yet
