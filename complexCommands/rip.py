@@ -10,7 +10,7 @@ os.chdir(path)
 rip_cooldown = []
 cooldownTime = 15
 
-with open('../jsonFiles/rip_map.json') as f:
+with open('jsonFiles/rip_map.json') as f:
 	rip_map = json.load(f)
 
 async def commandRip(message, client, owner_user):
