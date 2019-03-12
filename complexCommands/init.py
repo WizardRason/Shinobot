@@ -58,6 +58,19 @@ def init():
 
 		with open('jsonFiles/channels.json','w') as f:
 			json.dump(d, f)
+
+	if os.path.exists("jsonFiles/retiredRips.json"):
+		# checks if file exists
+		print ("File exists and is readable")
+	else:
+		print ("Either file is missing or is not readable, creating file...")
+		f = open('jsonFiles/retiredRips.json','wb')  #create file locally
+		f.close()
+
+		d = {}
+
+		with open('jsonFiles/retiredRips.json','w') as f:
+			json.dump(d, f)
 	openSettings()
 			
 def openSettings():
