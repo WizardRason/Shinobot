@@ -29,6 +29,8 @@ def init():
 			"admin_server": "the id of your server (where you talk as your bot)"
 		}.items()}
 
+		settings["owner_user"] = int(settings["owner_user"])
+		settings["admin_server"] = int(settings["admin_server"])
 
 		with open('jsonFiles/settings.json','w') as f:
 			json.dump(settings, f)
