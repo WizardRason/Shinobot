@@ -2,12 +2,13 @@ import discord
 import asyncio
 import os
 import requests
-from io import BytesIO
+#from io import BytesIO
 from discord.ext.commands import Bot
 from discord.ext import commands
 import json
 import random
 import socket
+import time
 
 from complexCommands import init
 from complexCommands import rip
@@ -42,12 +43,13 @@ async def on_ready():
 	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	s.connect(("8.8.8.8", 80))
 	print(s.getsockname()[0])
-	await client.send_message(await client.get_user_info(owner_user), s.getsockname()[0])
+	channel = await client.fetch_user(owner_user)
+	await channel.send(s.getsockname()[0])
 	s.close()
 
-async def deleteAfterTime(message, coolDown):
-	await asyncio.sleep(coolDown)
-	await client.delete_message(message)
+#async def deleteAfterTime(message, coolDown):
+#	await asyncio.sleep(coolDown)
+#	await client.delete_message(message)
 
 @client.event
 async def on_message(message):
@@ -73,20 +75,21 @@ async def on_message(message):
 		"Are they donuts? They're donuts, right? They have to be donuts!",
 		"So they are donuts! That's magnificent!"
 		]
-		msg_donut = await client.send_message(message.channel, random.choice(doughPhrases) + "\n" + random.choice(doughLinks))
-		asyncio.ensure_future(deleteAfterTime(msg_donut, cooldownTime))
+		#msg_donut = 
+		await message.channel.send(random.choice(doughPhrases) + "\n" + random.choice(doughLinks), delete_after = cooldownTime)
+		#asyncio.ensure_future(deleteAfterTime(msg_donut, cooldownTime))
 
 	#posts a meme based on the given search term, or posts a default meme (meme.jpg)
 	elif (message.content.startswith('!meme') and False): #not done yet
 		if len(message.content.strip()) > 5:
 			meme = message.content[5:]
-			await client.send_message(message.channel, 'This is a meme. Searching the web for:' + meme)
+			await message.channel.send('This is a meme. Searching the web for:' + meme)
 		else:
-			await client.send_file(message.channel, 'meme.jpg')
+			await message.channel.send('meme.jpg')
 
 	#posts a gif of shinobu being carried
 	elif (message.content.startswith('!adult')):
-		await client.send_message(message.channel, 'I need an adult\n' + "https://thumbs.gfycat.com/BigheartedSplendidFlyingfish-size_restricted.gif")
+		await message.channel.send('I need an adult\n' + "https://thumbs.gfycat.com/BigheartedSplendidFlyingfish-size_restricted.gif")
 
 	#!rip commands
 	elif (message.content.startswith('!rip')):
@@ -98,21 +101,35 @@ async def on_message(message):
 		pass
 		
 	#posts everything said in public_channel into secret_channel, including who said it
-	if (message.server.id != admin_server or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
+	if (message.guild.id != admin_server or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
 		if message.channel.id not in list(channels.keys()) and message.server.id != admin_server:
-			newChan = await client.create_channel(server = client.get_server(admin_server), name = message.channel.name)
+			newChan = await client.get_guild(admin_server).create_text_channel(name = message.channel.name)
 			channels.update({message.channel.id: newChan.id})
 			channels.update({newChan.id: message.channel.id})
 			with open('jsonFiles/channels.json','w') as f:
 				json.dump(channels, f)
 		
-		content = (message.content if message.server.id == admin_server else '**' + message.author.name +'**: ' + message.content)
+		content = (message.content if message.guild.id == admin_server else '**' + message.author.name +'**: ' + message.content)
+		
 		if content:
-			await client.send_message(client.get_channel(channels[message.channel.id]), content)
-		if message.attachments:
-			for k in message.attachments:
-				_, file_ext = os.path.splitext(k['url'])
-				await client.send_file(client.get_channel(channels[message.channel.id]), BytesIO(requests.get(k['url']).content), filename = 'file' + file_ext)
+			await client.get_channel(channels[message.channel.id]).send(content = content, files = await message.attachments.to_file())
+		#	await client.get_channel(channels[message.channel.id]).send_message(content)
+		#if message.attachments:
+		#	for k in message.attachments:
+		#		_, file_ext = os.path.splitext(k['url'])
+		#		await client.get_channel(channels[message.channel.id]).send(BytesIO(requests.get(k['url']).content), filename = 'file' + file_ext)
 
 if __name__ == '__main__':
-    client.run(token)
+    #client.run(token)
+	while True:
+		try:
+			client.loop.run_until_complete(client.start(token))
+	
+		except KeyboardInterrupt:
+			client.loop.run_until_complete(client.logout())
+			# cancel all tasks lingering
+			raise
+			exit
+		except BaseException:
+			print('Retrying in 30 seconds...')
+			time.sleep(30)
