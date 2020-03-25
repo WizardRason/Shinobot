@@ -9,15 +9,17 @@ import json
 import random
 import socket
 import time
+import pickle
 
 from complexCommands import init
+init.init()
 from complexCommands import rip
 #from complexCommands import anime
 
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
 
-init.init()
+#init.init()
 
 client  = discord.Client()
 
@@ -29,8 +31,11 @@ token       = init.token 		#settings["token"]
 
 admin_server = init.admin_server	#settings["admin_server"]
 
-with open('jsonFiles/channels.json') as f:
-	channels = json.load(f)
+#with open('jsonFiles/channels.json') as f:
+try:
+	channels = pickle.load( open( "jsonFiles/channels.p", "rb" ) )
+except EOFError:
+	channels = {}
 
 @client.event
 async def on_ready():
@@ -101,18 +106,24 @@ async def on_message(message):
 		pass
 		
 	#posts everything said in public_channel into secret_channel, including who said it
-	if (message.guild.id != admin_server or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
-		if message.channel.id not in list(channels.keys()) and message.server.id != admin_server:
+	if (message.channel.type == discord.ChannelType.text and message.guild != client.get_guild(admin_server) or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
+		if message.channel.id not in list(channels.keys()) and message.guild != client.get_guild(admin_server):
 			newChan = await client.get_guild(admin_server).create_text_channel(name = message.channel.name)
 			channels.update({message.channel.id: newChan.id})
 			channels.update({newChan.id: message.channel.id})
-			with open('jsonFiles/channels.json','w') as f:
-				json.dump(channels, f)
+			#with open('jsonFiles/channels.json','w') as f:
+			#	json.dump(channels, f)
+			print(channels)
+			pickle.dump( channels, open( "jsonFiles/channels.p", "wb" ) )
 		
 		content = (message.content if message.guild.id == admin_server else '**' + message.author.name +'**: ' + message.content)
 		
 		if content:
-			await client.get_channel(channels[message.channel.id]).send(content = content, files = await message.attachments.to_file())
+			if message.attachments:
+				for k in message.attachments:
+					await client.get_channel(channels[message.channel.id]).send(content = content, file = await k.to_file())
+			else: 
+				await client.get_channel(channels[message.channel.id]).send(content = content)
 		#	await client.get_channel(channels[message.channel.id]).send_message(content)
 		#if message.attachments:
 		#	for k in message.attachments:
@@ -129,7 +140,7 @@ if __name__ == '__main__':
 			client.loop.run_until_complete(client.logout())
 			# cancel all tasks lingering
 			raise
-			exit
+			#exit
 		except BaseException:
 			print('Retrying in 30 seconds...')
 			time.sleep(30)
