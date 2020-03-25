@@ -33,11 +33,12 @@ async def commandRip(message, client, owner_user):
 
 				for k in message.attachments:
 					if os.path.exists('ripPics/' + filename + '.jpg'):
-						await client.get_member(owner_user).send("This got replaced",file = discord.File('ripPics/' + filename + '.jpg'))
+						with open('ripPics/' + filename + '.jpg', 'rb') as f:
+							await client.get_user(owner_user).send("This got replaced",file = discord.File(f))
 						# await client.send_file(client.get_member(owner_user),'ripPics/' + filename + '.jpg',content="This got replaced")
 
 					f = open('ripPics/' + filename + '.jpg','wb')  #create file locally
-					f.write(requests.get(k['url']).content)  #write image content to this file
+					f.write(requests.get(k.url).content)  #write image content to this file
 					f.close()
 
 				await message.channel.send(quote, file = (discord.File('ripPics/' + filename + '.jpg') if os.path.exists('ripPics/' + filename + '.jpg') else None))

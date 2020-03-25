@@ -1,5 +1,6 @@
 import json
 import os
+import pickle
 
 path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(path)
@@ -48,18 +49,19 @@ def init():
 		with open('jsonFiles/rip_map.json','w') as f:
 			json.dump(d, f)
 
-	if os.path.exists("jsonFiles/channels.json"):
+	if os.path.exists("jsonFiles/channels.p"):
 		# checks if file exists
 		print ("File exists and is readable")
 	else:
 		print ("Either file is missing or is not readable, creating file...")
-		f = open('jsonFiles/channels.json','wb')  #create file locally
+		f = open('jsonFiles/channels.p','wb')  #create file locally
 		f.close()
 
 		d = {}
 
-		with open('jsonFiles/channels.json','w') as f:
-			json.dump(d, f)
+		pickle.dump( d, open( "jsonFiles/channels.p", "wb" ) )
+		#with open('jsonFiles/channels.json','w') as f:
+		#	json.dump(d, f)
 
 	if os.path.exists("jsonFiles/retiredRips.json"):
 		# checks if file exists
