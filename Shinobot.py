@@ -106,7 +106,7 @@ async def on_message(message):
 		pass
 
 	elif (message.content.startswith('!command')):
-		cmd = message.content[7:].strip() if len(message.content.strip()) > 7 else None
+		cmd = message.content[8:].strip() if len(message.content.strip()) > 7 else None
 		if cmd:
 			scriptdir = path+"/scripts/"
 			if os.path.exists('scripts/' + cmd) and (message.author.id == owner_user or "!" not in cmd):
