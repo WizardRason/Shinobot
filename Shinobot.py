@@ -109,7 +109,7 @@ async def on_message(message):
 		cmd = message.content[8:].strip() if len(message.content.strip()) > 7 else None
 		if cmd:
 			scriptdir = path+"/scripts/"
-			if os.path.exists('scripts/' + cmd) and (message.author.id == owner_user or "!" not in cmd):
+			if os.path.exists('scripts/' + cmd) and (message.author.id == owner_user or "@" not in cmd):
 				os.system(scriptdir + cmd)
 			else: await message.channel.send("Bad Path")
 
