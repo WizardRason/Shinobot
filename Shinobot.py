@@ -111,14 +111,14 @@ async def on_message(message):
 			scriptdir = path+"/scripts/"
 			if os.path.exists('scripts/' + cmd) and (message.author.id == owner_user or "!" not in cmd):
 				os.system(scriptdir + cmd)
-			else: await message.channel.send(os.listdir("Bad Path"))
+			else: await message.channel.send("Bad Path")
 
 	elif (message.content.startswith('!cmdlist')):
 		if os.path.exists('scripts/'):
-			l = os.listdir(path + 'scripts/')
+			l = os.listdir(path + '/scripts/')
 			await message.channel.send([x for x in l if not '!' in x])
 			if message.author.id == owner_user: await message.channel.send(l)
-		else: await message.channel.send(os.listdir("None Saved"))
+		else: await message.channel.send("None Saved")
 
 	#posts everything said in public_channel into secret_channel, including who said it
 	if (message.channel.type == discord.ChannelType.text and message.guild != client.get_guild(admin_server) or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
