@@ -116,7 +116,7 @@ async def on_message(message):
 	elif (message.content.startswith('!cmdlist')):
 		if os.path.exists('scripts/'):
 			l = os.listdir(path + '/scripts/')
-			await message.channel.send([x for x in l if not '!' in x])
+			await message.channel.send([x for x in l if not '@' in x])
 			if message.author.id == owner_user: await message.channel.send(l)
 		else: await message.channel.send("None Saved")
 
