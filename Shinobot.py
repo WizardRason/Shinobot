@@ -104,7 +104,22 @@ async def on_message(message):
 	elif (message.content.startswith('!anime') or message.content.startswith('!manga')):
 		#await (anime.commandAnime(message, client) if message.content[1] == 'a' else anime.commandManga(message, client))
 		pass
-		
+
+	elif (message.content.startswith('!command')):
+		cmd = message.content[7:].strip() if len(message.content.strip()) > 7 else None
+		if cmd:
+			scriptdir = path+"/scripts/"
+			if os.path.exists('scripts/' + cmd) and (message.author.id == owner_user or "!" not in cmd):
+				os.system(scriptdir + cmd)
+			else: await message.channel.send(os.listdir("Bad Path"))
+
+	elif (message.content.startswith('!cmdlist')):
+		if os.path.exists('scripts/'):
+			l = os.listdir(path + 'scripts/')
+			await message.channel.send([x for x in l if not '!' in x])
+			if message.author.id == owner_user: await message.channel.send(l)
+		else: await message.channel.send(os.listdir("None Saved"))
+
 	#posts everything said in public_channel into secret_channel, including who said it
 	if (message.channel.type == discord.ChannelType.text and message.guild != client.get_guild(admin_server) or (client.user.id != message.author.id and message.channel.id in list(channels.keys()))):
 		if message.channel.id not in list(channels.keys()) and message.guild != client.get_guild(admin_server):

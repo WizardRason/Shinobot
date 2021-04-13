@@ -3,6 +3,7 @@
 *.bat
 *.p
 ripPics/
+*.sh
 
 
 # Created by https://www.gitignore.io/api/python
