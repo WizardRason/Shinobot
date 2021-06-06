@@ -1,4 +1,5 @@
-import discord
+#removed until functioning api found
+'''import discord
 import asyncio
 import bs4 as bs
 import urllib.request
@@ -96,3 +97,4 @@ def genre_scrape(message_link):
 
 	genre_list = [x.text for x in soup.select('a[href^="/anime/genre/"]')]
 	return genre_list
+	'''

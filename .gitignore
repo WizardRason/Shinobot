@@ -3,6 +3,7 @@
 *.bat
 *.p
 ripPics/
+scripts/
 *.sh
 
 

@@ -16,65 +16,52 @@ token       = None
 admin_server = None
 
 def init():
-	if os.path.exists("jsonFiles/settings.json"):
-		# checks if file exists
-		print ("File exists and is readable")
-	else:
-		print ("Either file is missing or is not readable, creating file...")
 
-		settings = {k: input(f'Please enter {m}: ') for k, m in {
-			"mal_username": "your mal username",
-			"mal_password": "your mal password",
-			"owner_user": "discord id",
-			"token": "your bot token",
-			"admin_server": "the id of your server (where you talk as your bot)"
-		}.items()}
+	filePaths = [
+		"settings.json",
+		"rip_map.json",
+		"channels.p",
+		"retiredRips.json"
+	]
+	allRead = True
 
-		settings["owner_user"] = int(settings["owner_user"])
-		settings["admin_server"] = int(settings["admin_server"])
+	if not os.path.isdir(os.path.join(path,'..','scripts')):
+		os.mkdir(os.path.join(path,'..','scripts'))
+	if not os.path.isdir(os.path.join(path,'..','ripPics')):
+		os.mkdir(os.path.join(path,'..','ripPics'))
 
-		with open('jsonFiles/settings.json','w') as f:
-			json.dump(settings, f)
+	for filePath in filePaths:
+		if os.path.exists("jsonFiles/" + filePath):
+			# checks if file exists
+			pass #print (settingsFile + " exists and is readable")
+		else:
+			print ("Either " + filePath + " is missing or is not readable, creating new file...")
 
-	if os.path.exists("jsonFiles/rip_map.json"):
-		# checks if file exists
-		print ("File exists and is readable")
-	else:
-		print ("Either file is missing or is not readable, creating file...")
-		f = open('jsonFiles/rip_map.json','wb')  #create file locally
-		f.close()
+			if "settings.json" in filePath:
+				settings = {k: input(f'Please enter {m}: ') for k, m in {
+					"mal_username": "your mal username (depreciated)",
+					"mal_password": "your mal password (depreciated)",
+					"owner_user": "discord id",
+					"token": "your bot token",
+					"admin_server": "the id of your server (where you talk as your bot)"
+				}.items()}
 
-		d = {}
+				settings["owner_user"] 		= int(settings["owner_user"])
+				settings["admin_server"] 	= int(settings["admin_server"])
+			else:
+				f = open('jsonFiles/'+ filePath,'wb')  #create file locally
+				f.close()
+				settings = {}
 
-		with open('jsonFiles/rip_map.json','w') as f:
-			json.dump(d, f)
+			if ".json" in filePath:
+				with open('jsonFiles/settings.json','w') as f:
+					json.dump(settings, f)
+			else:
+				pickle.dump( settings, open( "jsonFiles/channels.p", "wb" ) )
+			allRead = False
 
-	if os.path.exists("jsonFiles/channels.p"):
-		# checks if file exists
-		print ("File exists and is readable")
-	else:
-		print ("Either file is missing or is not readable, creating file...")
-		f = open('jsonFiles/channels.p','wb')  #create file locally
-		f.close()
+	if allRead: print ("All files exist and are readable")
 
-		d = {}
-
-		pickle.dump( d, open( "jsonFiles/channels.p", "wb" ) )
-		#with open('jsonFiles/channels.json','w') as f:
-		#	json.dump(d, f)
-
-	if os.path.exists("jsonFiles/retiredRips.json"):
-		# checks if file exists
-		print ("File exists and is readable")
-	else:
-		print ("Either file is missing or is not readable, creating file...")
-		f = open('jsonFiles/retiredRips.json','wb')  #create file locally
-		f.close()
-
-		d = {}
-
-		with open('jsonFiles/retiredRips.json','w') as f:
-			json.dump(d, f)
 	openSettings()
 			
 def openSettings():

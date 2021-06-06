@@ -1,4 +1,5 @@
-from datetime import datetime, time
+#removed until use found
+'''from datetime import datetime, time
 # https://stackoverflow.com/questions/18884017/how-to-check-in-python-if-im-in-certain-range-of-times-of-the-day
 
 timestamp = datetime.datetime.now().time() # Throw away the date information
@@ -18,3 +19,4 @@ if 0 <= now.weekday() <= 4:
     print("it's a weekday")
     if time(8, 30) <= now.time() <= time(15):
         print("and it's in range")
+'''
