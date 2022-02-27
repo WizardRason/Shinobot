@@ -89,6 +89,10 @@ async def on_message(message):
 		else:
 			await message.channel.send('meme.jpg')
 
+	elif (message.content.startswith('!motto')): 
+		mottos = ["Retarded, not gay!", "Retarded, not Noobscout!"]
+		await message.channel.send(random.choices(mottos,weights=(19,1))[0])
+
 	#posts a gif of shinobu being carried
 	elif (message.content.startswith('!adult')):
 		await message.channel.send('I need an adult\n' + "https://thumbs.gfycat.com/BigheartedSplendidFlyingfish-size_restricted.gif")
@@ -248,8 +252,14 @@ async def command(ctx: SlashContext, command : str):
 
 
 @slash.slash(name="adult", description = "I need an adult!", guild_ids = TestingGuildList)
-async def Randomrip(ctx: SlashContext):
+async def Adult(ctx: SlashContext):
 	await ctx.send('I need an adult!\n' + "https://thumbs.gfycat.com/BigheartedSplendidFlyingfish-size_restricted.gif")
+
+@slash.slash(name="motto", description = "The SwS motto", guild_ids = TestingGuildList)
+async def Motto(ctx: SlashContext):
+	mottos = ["Retarded, not gay!", "Retarded, not Noobscout!"]
+	await ctx.send(random.choices(mottos,weights=(19,1))[0])
+
 
 if __name__ == '__main__':
 	client.run(token)
